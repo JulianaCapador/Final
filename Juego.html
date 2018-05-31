@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Juego de Ladrillos</title>
+    <!--Mirar si se pasa a css-->
+    <style>
+    	* { padding: 0; margin: 0; }
+    	canvas { background: #eee; display: block; margin: 0 auto; }
+    </style>
+</head>
+<body>
+<canvas id="myCanvas" width="480" height="320"></canvas>
+
+<script>
+	/*Creaciòn del canvas*/
+	var canvas = document.getElementById("myCanvas");
+	var ctx = canvas.getContext("2d");
+
+	/*Variables Pelota*/
+ 	var x = canvas.width/2;
+ 	var y = canvas.height-30;
+
+ 	var dx = 2;
+ 	var dy = -2;
+
+ 	var radioBolita = 10;
+
+ 	function dibujarBolita(){
+	 	ctx.beginPath();
+		ctx.arc(x, y, radioBolita, 0, Math.PI*2);
+		ctx.fillStyle = "#0095DD";
+		ctx.fill();
+		ctx.closePath();
+ 	}
+
+ 	function draw(){
+ 	/*Limpia el rastro que deja la pelota en la pantalla*/
+ 	ctx.clearRect(0,0,canvas.width, canvas.height);
+ 	dibujarBolita();
+
+	/*Rebote arriba - abajo*/
+ 	if(y + dy > canvas.height-radioBolita || y + dy < radioBolita) {
+    dy = -dy;
+	}
+
+	/*Rebote izquierda - derecha*/
+	if(x + dx > canvas.width-radioBolita || x + dx < radioBolita){
+		dx = -dx;
+	}
+
+	x += dx;
+	y += dy;
+
+ 	}
+ 	setInterval(draw, 20);
+
+</script>
+</body>
+</html>
