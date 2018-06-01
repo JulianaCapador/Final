@@ -46,6 +46,8 @@
  	var ladrilloOffsetTop = 30; 
  	var ladrilloOffsetLeft = 30;
 
+ 	/*Variable puntaje*/
+ 	var score = 0;
 
  	/*Para escuchar los eventos de los botones*/
  	/*nombre, funcion, estadoinicial*/
@@ -90,12 +92,19 @@
  					if(x > b.x && x < b.x+ladrilloWidth && y > b.y && y < b.y+ladrilloHeight ){
  					dy = -dy;
  					b.status = 0;
+ 					score += 2;
  					}
  				}	
  			}
  		}
  	}
 
+ 	/*Puntaje*/
+ 	function dibujarScore(){
+ 		ctx.font = "16px Arial";
+ 		ctx.fillStyle = "#0095DD";
+ 		ctx.fillText("Score: "+score, 8, 20);
+ 	}
  	
  	function dibujarBolita(){
 	 	ctx.beginPath();
@@ -140,6 +149,7 @@
  	/*Limpia el rastro que deja la pelota en la pantalla*/
  	ctx.clearRect(0,0,canvas.width, canvas.height);
  	dibujarBolita();
+ 	dibujarScore();
  	dibujarRaqueta();
  	dibujarLadrillos();
  	deteccionColision();
