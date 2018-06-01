@@ -26,6 +26,40 @@
 
  	var radioBolita = 10;
 
+ 	/*Variables raqueta*/
+ 	var raquetaHeight = 10;
+ 	var raquetaWidth = 75;
+ 	/*posición del eje x donde se empieza a dibujar*/
+ 	var raquetaX = (canvas.width-raquetaWidth)/2;
+
+ 	/*Variables contorl raqueta*/
+ 	var rightPressed = false;
+ 	var leftPressed = false;
+
+ 	/*Para escuchar los eventos de los botones*/
+ 	/*nombre, funcion, estadoinicial*/
+ 	document.addEventListener("keydown",keyDownHandler, false);
+ 	document.addEventListener("keyup",keyUpHandler,false);
+
+ 	/*Funciones eventos del teclado*/
+ 	function keyDownHandler(e){
+ 		if(e.keyCode == 39){
+ 			rightPressed = true;
+ 		}
+ 		else if(e.keyCode == 37){
+ 			leftPressed = true;
+ 		}
+ 	}
+
+ 	function keyUpHandler(e){
+ 		if(e.keyCode == 39){
+ 			rightPressed = false;
+ 		}
+ 		else if(e.keyCode == 37){
+ 			leftPressed = false;
+ 		}
+ 	}
+
  	function dibujarBolita(){
 	 	ctx.beginPath();
 		ctx.arc(x, y, radioBolita, 0, Math.PI*2);
@@ -34,11 +68,20 @@
 		ctx.closePath();
  	}
 
+ 	function dibujarRaqueta(){
+ 		ctx.beginPath();
+ 		ctx.rect(raquetaX, canvas.height-raquetaHeight,raquetaWidth,raquetaHeight);
+ 		ctx.fillStyle = "#0095DD";
+ 		ctx.fill();
+ 		ctx.closePath();
+ 	}
+
  	function draw(){
  	/*Limpia el rastro que deja la pelota en la pantalla*/
  	ctx.clearRect(0,0,canvas.width, canvas.height);
  	dibujarBolita();
-
+ 	dibujarRaqueta();
+ 	
 	/*Rebote arriba - abajo*/
  	if(y + dy > canvas.height-radioBolita || y + dy < radioBolita) {
     dy = -dy;
@@ -49,10 +92,18 @@
 		dx = -dx;
 	}
 
+	/*Movimientos de la raqueta*/
+	if(rightPressed && raquetaX < canvas.width-raquetaWidth) {
+    raquetaX += 5; // 5 pixels
+	}
+	else if(leftPressed && raquetaX > 0) {
+    raquetaX -= 5; // 5pixels
+	}	
+
 	x += dx;
 	y += dy;
-
  	}
+
  	setInterval(draw, 20);
 
 </script>
