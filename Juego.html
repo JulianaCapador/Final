@@ -36,6 +36,25 @@
  	var rightPressed = false;
  	var leftPressed = false;
 
+ 	/*Variables Ladrillos*/
+ 	/*var filaLadrillos = 3;
+ 	var columnaLadrillos = 5;
+ 	var ladrilloWidth = 75;
+ 	var ladrilloHeight = 20;
+ 	var ladrilloHueco = 10; //Distancia entre ladrillose
+ 	/*Margen superior e izquierdo*/
+ 	/*var ladrilloOffsetTop = 30; 
+ 	var ladrilloOffsetLeft = 30;
+
+ 	var ladrillos = [];
+ 	for(c = 0; c <columnaLadrillos; c++){
+ 		ladrillos[c] = [];
+
+ 		for(r = 0; r<filaLadrillos;r++){
+ 			ladrillos[c][r] = {x: 0; y: 0};
+ 		}
+ 	}*/
+
  	/*Para escuchar los eventos de los botones*/
  	/*nombre, funcion, estadoinicial*/
  	document.addEventListener("keydown",keyDownHandler, false);
@@ -75,18 +94,44 @@
  		ctx.fill();
  		ctx.closePath();
  	}
+/*
+ 	function dibujarLadrillos(){
+ 		for(c = 0;c < columnaLadrillos; c++){
+ 			for(r = 0; r < filaLadrillos;r++){
+ 				ladrillos[c][r].x = 0;
+ 				ladrillos[c][r].y = 0; 
+
+ 				ctx.beginPath();
+ 				ctx.rect(0,0,ladrilloWidth,ladrilloHeight);
+ 				ctx.fillStyle = "#0095DD";
+ 				ctx.fill();
+ 				ctx.closePath();
+ 			}			
+ 		}
+ 	}*/
 
  	function draw(){
  	/*Limpia el rastro que deja la pelota en la pantalla*/
  	ctx.clearRect(0,0,canvas.width, canvas.height);
  	dibujarBolita();
  	dibujarRaqueta();
+ 	//dibujarLadrillos();
  	
 	/*Rebote arriba - abajo*/
- 	if(y + dy > canvas.height-radioBolita || y + dy < radioBolita) {
+ 	if(y + dy < radioBolita) {
     dy = -dy;
 	}
-
+	/*Cuando la pelota choca con la raqueta*/
+	else if(y + dy > canvas.height-radioBolita){
+		if(x > raquetaX && x < raquetaX + raquetaWidth){
+			dy = -dy;
+		}
+		/*Si toca el borde inferior del canvas pierde*/
+		else{
+		alert("Game Over");
+		document.location.reload();
+	}
+	}
 	/*Rebote izquierda - derecha*/
 	if(x + dx > canvas.width-radioBolita || x + dx < radioBolita){
 		dx = -dx;
