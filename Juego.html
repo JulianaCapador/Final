@@ -46,19 +46,20 @@
  	var ladrilloOffsetTop = 30; 
  	var ladrilloOffsetLeft = 30;
 
- 	var ladrillos = [];
- 	for(c = 0; c <columnaLadrillos; c++){
- 		ladrillos[c] = [];
-
- 		for(r = 0; r<filaLadrillos;r++){
- 			ladrillos[c][r] = {x: 0, y: 0};
- 		}
- 	}
 
  	/*Para escuchar los eventos de los botones*/
  	/*nombre, funcion, estadoinicial*/
  	document.addEventListener("keydown",keyDownHandler, false);
  	document.addEventListener("keyup",keyUpHandler,false);
+
+ 	var ladrillos = [];
+ 	for(c = 0; c <columnaLadrillos; c++){
+ 		ladrillos[c] = [];
+
+ 		for(r = 0; r<filaLadrillos;r++){
+ 			ladrillos[c][r] = {x: 0, y: 0, status: 1};
+ 		}
+ 	}
 
  	/*Funciones eventos del teclado*/
  	function keyDownHandler(e){
@@ -80,18 +81,22 @@
  	}
 
  	/*Detección de las colisiones del ladrillo con la bolita*/
- 	function colision(){
- 		for(c = 0; c<columnaLadrillos;c++){
- 			for (r = 0; r <filaLadrillos; r++){
+ 	function deteccionColision(){
+ 		for(c = 0; c<columnaLadrillos; c++){
+ 			for(r = 0; r<filaLadrillos; r++){
  				var b = ladrillos[c][r];
- 				if(x > b.x && b.x+ladrilloWidth && y > b.y && b.y+ladrilloHeight){
- 					dy = -dy;
- 				}
- 			}
 
+ 				if(b.status == 1){
+ 					if(x > b.x && x < b.x+ladrilloWidth && y > b.y && y < b.y+ladrilloHeight ){
+ 					dy = -dy;
+ 					b.status = 0;
+ 					}
+ 				}	
+ 			}
  		}
  	}
 
+ 	
  	function dibujarBolita(){
 	 	ctx.beginPath();
 		ctx.arc(x, y, radioBolita, 0, Math.PI*2);
@@ -113,30 +118,32 @@
  		for(c = 0;c < columnaLadrillos; c++){
  			for(r = 0; r < filaLadrillos;r++){
 
-	 	var ladrilloX = (c*(ladrilloWidth+ladrilloHueco))+ladrilloOffsetLeft;
-	 	var ladrilloY =(r*(ladrilloHeight+ladrilloHueco))+
-	 	ladrilloOffsetTop;
+	 			if(ladrillos[c][r].status == 1){
+	 				var ladrilloX = (c*(ladrilloWidth+ladrilloHueco))+ladrilloOffsetLeft;
+				 	var ladrilloY =(r*(ladrilloHeight+ladrilloHueco))+ladrilloOffsetTop;
 
- 				ladrillos[c][r].x = ladrilloX;
- 				ladrillos[c][r].y = ladrilloY; 
+	 				ladrillos[c][r].x = ladrilloX;
+	 				ladrillos[c][r].y = ladrilloY; 
 
- 				ctx.beginPath();
- 				ctx.rect(ladrilloX,ladrilloY,ladrilloWidth,ladrilloHeight);
- 				ctx.fillStyle = "#0095DD";
- 				ctx.fill();
- 				ctx.closePath();
+	 				ctx.beginPath();
+	 				ctx.rect(ladrilloX,ladrilloY,ladrilloWidth,ladrilloHeight);
+	 				ctx.fillStyle = "#0095DD";
+	 				ctx.fill();
+	 				ctx.closePath();
+	 			}	
  			}			
  		}
  	}
 
+
  	function draw(){
  	/*Limpia el rastro que deja la pelota en la pantalla*/
  	ctx.clearRect(0,0,canvas.width, canvas.height);
- 	dibujarLadrillos();
  	dibujarBolita();
  	dibujarRaqueta();
- 	
-
+ 	dibujarLadrillos();
+ 	deteccionColision();
+ 
 	/*Rebote arriba - abajo*/
  	if(y + dy < radioBolita) {
     dy = -dy;
