@@ -37,13 +37,13 @@
  	var leftPressed = false;
 
  	/*Variables Ladrillos*/
- 	/*var filaLadrillos = 3;
+ 	var filaLadrillos = 3;
  	var columnaLadrillos = 5;
  	var ladrilloWidth = 75;
  	var ladrilloHeight = 20;
  	var ladrilloHueco = 10; //Distancia entre ladrillose
  	/*Margen superior e izquierdo*/
- 	/*var ladrilloOffsetTop = 30; 
+ 	var ladrilloOffsetTop = 30; 
  	var ladrilloOffsetLeft = 30;
 
  	var ladrillos = [];
@@ -51,9 +51,9 @@
  		ladrillos[c] = [];
 
  		for(r = 0; r<filaLadrillos;r++){
- 			ladrillos[c][r] = {x: 0; y: 0};
+ 			ladrillos[c][r] = {x: 0, y: 0};
  		}
- 	}*/
+ 	}
 
  	/*Para escuchar los eventos de los botones*/
  	/*nombre, funcion, estadoinicial*/
@@ -79,6 +79,19 @@
  		}
  	}
 
+ 	/*Detección de las colisiones del ladrillo con la bolita*/
+ 	function colision(){
+ 		for(c = 0; c<columnaLadrillos;c++){
+ 			for (r = 0; r <filaLadrillos; r++){
+ 				var b = ladrillos[c][r];
+ 				if(x > b.x && b.x+ladrilloWidth && y > b.y && b.y+ladrilloHeight){
+ 					dy = -dy;
+ 				}
+ 			}
+
+ 		}
+ 	}
+
  	function dibujarBolita(){
 	 	ctx.beginPath();
 		ctx.arc(x, y, radioBolita, 0, Math.PI*2);
@@ -94,29 +107,36 @@
  		ctx.fill();
  		ctx.closePath();
  	}
-/*
+
+
  	function dibujarLadrillos(){
  		for(c = 0;c < columnaLadrillos; c++){
  			for(r = 0; r < filaLadrillos;r++){
- 				ladrillos[c][r].x = 0;
- 				ladrillos[c][r].y = 0; 
+
+	 	var ladrilloX = (c*(ladrilloWidth+ladrilloHueco))+ladrilloOffsetLeft;
+	 	var ladrilloY =(r*(ladrilloHeight+ladrilloHueco))+
+	 	ladrilloOffsetTop;
+
+ 				ladrillos[c][r].x = ladrilloX;
+ 				ladrillos[c][r].y = ladrilloY; 
 
  				ctx.beginPath();
- 				ctx.rect(0,0,ladrilloWidth,ladrilloHeight);
+ 				ctx.rect(ladrilloX,ladrilloY,ladrilloWidth,ladrilloHeight);
  				ctx.fillStyle = "#0095DD";
  				ctx.fill();
  				ctx.closePath();
  			}			
  		}
- 	}*/
+ 	}
 
  	function draw(){
  	/*Limpia el rastro que deja la pelota en la pantalla*/
  	ctx.clearRect(0,0,canvas.width, canvas.height);
+ 	dibujarLadrillos();
  	dibujarBolita();
  	dibujarRaqueta();
- 	//dibujarLadrillos();
  	
+
 	/*Rebote arriba - abajo*/
  	if(y + dy < radioBolita) {
     dy = -dy;
@@ -144,7 +164,6 @@
 	else if(leftPressed && raquetaX > 0) {
     raquetaX -= 5; // 5pixels
 	}	
-
 	x += dx;
 	y += dy;
  	}
